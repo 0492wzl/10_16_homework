@@ -1,0 +1,264 @@
+
+张婷婷  10207160490
+
+先来先服务FCFS和短作业优先SJF进程调度算法
+
+程序代码：C++语言
+#include<iostream.h>
+#include<iomanip.h>
+#define Number 5 //数字可以自己定
+void main()
+{   
+    int n;
+	int daoda[Number],fuwu[Number],i;
+	cout<<"请依次输入各个进程的到达时间并以空格间隔:";
+    for(i=0;i<Number;i++)
+	{
+		cin>>daoda[i];
+	}
+    cout<<"请依次输入各个进程的服务时间，并以空格间隔:";
+	    for(i=0;i<Number;i++)
+	{
+		cin>>fuwu[i];
+	}
+	cout<<"请输入n=1选择FCFS或者n=2选择SJF或者n=3同时调用FCFS和SJF,n=";
+	cin>>n;
+	while(n<1||n>3){
+		cout<<"输入的n有误，请重新输入n，n=";
+		cin>>n;
+	}
+	struct statedd  //声明结构                                                          
+	{
+		bool doneF,doneS;
+	    int daoda,fuwu;
+	    float wancheng,zhouzhuan,daiquan,wan,zhou,dai;
+	};
+	statedd process[Number];//声明结构变量，这里为数组
+
+	int timeflyF=0,timeflyS=0;//定义两个类似于秒表的变量
+	int j,k,l,nextproF,nextproS;
+	// 获取数据
+	for(i=0;i<Number;i++)
+	{
+	process[i].doneF = false;
+	process[i].doneS = false;
+	process[i].wancheng = 0;
+	process[i].zhouzhuan = 0;
+	process[i].daiquan = 0;
+	process[i].wan = 0;
+	process[i].zhou = 0;
+	process[i].dai =0;
+	process[i].daoda = daoda[i];
+	process[i].fuwu = fuwu[i];
+	}
+	// 获取最先到达的进程下标first
+	int first=0;
+	l=first;
+	for(i=1;i<Number;i++)
+	{
+		if(daoda[first]>daoda[i])
+			first=i;
+	}
+		process[first].doneF=true;
+		process[first].doneS=true;
+		process[first].wancheng = process[first].fuwu + process[first].daoda;
+		process[first].wan = process[first].fuwu + process[first].daoda;
+		timeflyF += process[first].daoda+process[first].fuwu;
+		timeflyS += process[first].daoda+process[first].fuwu;
+	
+	// 接下去到达的进程
+	//*************************************************************
+	// fcfs ********************************************************
+	for(j=1;j<Number;j++)
+	{
+	  nextproF = Number+1;
+	  for(k =0 ; k<Number; k++ )
+	    {
+		if( !process[k].doneF )
+		{
+		  if( process[k].daoda <= timeflyF ) // 到达
+		 {
+		   if( nextproF ==Number+1)
+		    nextproF = k;
+		     else
+		       {
+				if( process[nextproF].daoda > process[k].daoda ) 
+					nextproF = k; //获取到达时刻最先的进程
+			}//else
+		}//if2
+			}//if1
+	  }//for
+		// 处理
+		process[nextproF].wancheng = process[nextproF].fuwu + timeflyF;
+		timeflyF += process[nextproF].fuwu;
+		process[nextproF].doneF=true;
+	} // circle2
+	// SJF **********************************************
+	for(j=1;j<Number;j++)
+	{
+	  nextproS = Number+1;
+	  for(k=0 ; k<Number; k++ )
+	   {
+	     if(!process[k].doneS)
+		{
+		  if( process[k].daoda <= timeflyS ) // 到达
+		    {
+			if( nextproS ==Number+1 )
+			    nextproS = k;
+			else
+			  {
+				if( process[nextproS].fuwu > process[k].fuwu ) 
+				nextproS = k; //获取服务时间最小的进程
+			  }//else
+		   }//if2
+		}//if1
+	 }//for
+		// 处理
+		process[nextproS].wan = process[nextproS].fuwu + timeflyS;
+		timeflyS += process[nextproS].fuwu;
+		process[nextproS].doneS=true;
+	} // circle2
+
+//****************************************************************
+
+	float Fz=0,Fdq=0,Sz=0,Sdq=0;//
+	for(i=0;i<Number;i++)
+	{   //----------------------------------------------------
+		process[i].zhouzhuan=process[i].wancheng-process[i].daoda;
+        Fz += process[i].zhouzhuan;
+		process[i].daiquan=process[i].zhouzhuan/process[i].fuwu;
+		Fdq += process[i].daiquan;
+		//----------------------------------------------------
+		process[i].zhou=process[i].wan-process[i].daoda;
+		Sz += process[i].zhou;
+		process[i].dai=process[i].zhou/process[i].fuwu;
+		Sdq += process[i].dai;
+	}
+
+//=========================输出==================================
+//-------------------------------------------------------------------	
+	if(n==1||n==3){
+cout<<"\t"<<endl;	
+cout<<"FCFS:"<<endl;
+for(i=0;i<Number;i++)
+{
+	
+	if(i<1)
+	{
+		cout<<"时刻"<<l<<":进程"<<i+1<<"在运行"<<endl;
+	}
+	else
+	{
+	 cout<<"时刻"<<process[i-1].wancheng<<":进程"<<i+1<<"在运行"<<endl;
+	}
+}
+cout<<setw(10)<<"进程ID"<<"    ";
+cout<<setw(10)<<"完成时间"<<"    ";
+cout<<setw(10)<<"周转时间"<<"    ";
+cout<<setw(10)<<"带权周转时间"<<"    "<<endl;
+for(i=0;i<Number;i++)
+{
+	cout<<setw(10)<<i+1<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].wancheng<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].zhouzhuan<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].daiquan<<"    "<<endl;
+}
+cout<<"平均周转时间为： "<<setiosflags(ios::fixed)<<setprecision(2)<<Fz/Number<<endl;
+cout<<"平均带权周转时间为："<<setiosflags(ios::fixed)<<setprecision(2)<<Fdq/Number<<endl;
+	}
+//-------------------------------------------------------------------
+	if(n==2||n==3){
+cout<<"\t"<<endl;		
+cout<<"SJF:"<<endl;
+for(i=0;i<Number;i++)
+{
+	
+	if(i<1)
+	{
+		cout<<"时刻"<<l<<":进程"<<i+1<<"在运行"<<endl;
+	}
+	else
+	{
+		cout<<"时刻"<<process[i-1].wan<<":进程"<<i+1<<"在运行"<<endl;
+	}
+}
+cout<<setw(10)<<"进程ID"<<"    ";
+cout<<setw(10)<<"完成时间"<<"    ";
+cout<<setw(10)<<"周转时间"<<"    ";
+cout<<setw(10)<<"带权周转时间"<<"    "<<endl;
+for(i=0;i<Number;i++)
+{
+	cout<<setw(10)<<i+1<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].wan<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].zhou<<"    ";
+	cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].dai<<"    "<<endl;
+}
+cout<<"平均周转时间为： "<<setiosflags(ios::fixed)<<setprecision(2)<<Sz/Number<<endl;
+cout<<"平均带权周转时间为："<<setiosflags(ios::fixed)<<setprecision(2)<<Sdq/Number<<endl;
+cout<<"\t"<<endl;
+	}
+}
+
+
+
+
+运行试验：
+  五个进程，到达时间分别为2， 4 ，5 ，7，10
+  服务时间分别为5 ，10， 6 ，19 ，7
+设置选择量n，
+当n=1时，选择FCFS
+当n=2时，选择SJF
+当n=3时，同时分别调用FCFS和SJF
+n不为1或2或3时提示错误，重新输入n；
+
+
+
+运行结果为:
+请依次输入各个进程的到达时间并以空格间隔：2  4 5 7 10
+请依次输入各个进程的服务时间，并以空格间隔：5 10 6 19 7
+请输入n=1选择FCFS或者ｎ＝２选择SJF或者ｎ＝３同时调用FCFS和SJF，ｎ＝３
+
+ＦＣＦＳ：
+　　时刻0：进程1在运行
+    时刻7：进程2在运行
+    时刻17：进程3在运行
+    时刻23：进程4在运行
+    时刻42：进程5在运行
+
+
+   进程ID     完成时间     周转时间     带权周转时间
+   1           7.00          5.00           1.00
+   2           17.00         13.00          1.30  
+   3           23.00         18.00          3.00
+   4           42.00         35.00          1.84
+   5           49.00         39.00          5.57
+平均周转时间：22.00
+平均带权周转时间：2.54
+
+
+SJF：
+    时刻0：进程1在运行
+    时刻7.00：进程2在运行
+    时刻30.00：进程3在运行
+    时刻13.00：进程4在运行
+    时刻49.00：进程5在运行
+
+
+   进程ID     完成时间     周转时间     带权周转时间
+   1           7.00          5.00           1.00
+   2           30.00         26.00          2.60  
+   3           13.00         8.00           1.33
+   4           49.00         42.00          2.21
+   5           20.00         10.00          1.43
+平均周转时间：18.20
+平均带权周转时间：1.71
+   
+
+ //FCFS算法的执行顺序是：1 2 3 4 5
+//SJF算法的执行顺序是：1 3 5 2 4
+
+
+
+
+
+
