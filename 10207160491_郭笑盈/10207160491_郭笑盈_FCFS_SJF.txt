@@ -1,0 +1,201 @@
+	#include<iostream.h>
+	#include<iomanip.h>
+	#define Number 5
+	void main()
+	{   
+	    int n;
+		int daoda[Number],fuwu[Number],i;
+		cout<<"依次输入各个进程到达时间，并空格间隔:";
+	    for(i=0;i<Number;i++)
+		{
+		 cin>>daoda[i];
+		}
+	    cout<<"依次输入各个进程服务时间，并空格间隔:";
+		 for(i=0;i<Number;i++)
+		{
+		 cin>>fuwu[i];
+		}
+		cout<<"请输入n=1选择FCFS或者n=2选择SJF或者n=3同时调用FCFS和SJF,n=";
+		cin>>n;
+		while(n<1||n>3){
+		 cout<<"输入的n有误，重新输入，n=";
+		 cin>>n;
+		}
+		struct statedd                                                       
+		{
+		  bool doneF,doneS;
+		  int daoda,fuwu;
+		  float wancheng,zhouzhuan,daiquan,wan,zhou,dai;
+		};
+		statedd process[Number];
+		int timeflyF=0,timeflyS=0;
+		int j,k,l,nextproF,nextproS;
+		
+		for(i=0;i<Number;i++)
+		{
+		process[i].doneF = false;
+		process[i].doneS = false;
+		process[i].wancheng = 0;
+		process[i].zhouzhuan = 0;
+		process[i].daiquan = 0;
+		process[i].wan = 0;
+		process[i].zhou = 0;
+		process[i].dai =0;
+		process[i].daoda = daoda[i];
+		process[i].fuwu = fuwu[i];
+		}
+		
+		int first=0;
+		l=first;
+		for(i=1;i<Number;i++)
+		{
+		 if(daoda[first]>daoda[i])
+		 first=i;
+		}
+		  process[first].doneF=true;
+		  process[first].doneS=true;
+	          process[first].wancheng = process[first].fuwu + process[first].daoda;
+		  process[first].wan = process[first].fuwu + process[first].daoda;
+		  timeflyF += process[first].daoda+process[first].fuwu;
+		  timeflyS += process[first].daoda+process[first].fuwu;
+		
+		for(j=1;j<Number;j++)
+		{
+		  nextproF = Number+1;
+		  for(k =0 ; k<Number; k++ )
+		  {
+		    if( !process[k].doneF )
+		     {
+			if( process[k].daoda <= timeflyF ) 
+			  {
+			    if( nextproF ==Number+1)
+				nextproF = k;
+			    else
+			      {
+				if( process[nextproF].daoda > process[k].daoda ) 
+				nextproF = k; 
+			      }
+			   }
+		     }
+		   }
+			
+		  process[nextproF].wancheng = process[nextproF].fuwu + timeflyF;
+		  timeflyF += process[nextproF].fuwu;
+		  process[nextproF].doneF=true;
+		} 
+		
+		for(j=1;j<Number;j++)
+		{
+			nextproS = Number+1;
+			for(k=0 ; k<Number; k++ )
+			{
+				if(!process[k].doneS)
+				{
+					if( process[k].daoda <= timeflyS ) 
+					{
+						if( nextproS ==Number+1 )
+							nextproS = k;
+						else
+						{
+							if( process[nextproS].fuwu > process[k].fuwu ) 
+								nextproS = k; 
+						}
+					}
+				}
+			}
+
+			process[nextproS].wan = process[nextproS].fuwu + timeflyS;
+			timeflyS += process[nextproS].fuwu;
+			process[nextproS].doneS=true;
+		} 
+	
+	
+	
+		float Fz=0,Fdq=0,Sz=0,Sdq=0;
+		for(i=0;i<Number;i++)
+		{  
+			process[i].zhouzhuan=process[i].wancheng-process[i].daoda;
+	        Fz += process[i].zhouzhuan;
+			process[i].daiquan=process[i].zhouzhuan/process[i].fuwu;
+			Fdq += process[i].daiquan;
+			
+			process[i].zhou=process[i].wan-process[i].daoda;
+			Sz += process[i].zhou;
+			process[i].dai=process[i].zhou/process[i].fuwu;
+			Sdq += process[i].dai;
+		}
+	
+	
+		if(n==1||n==3){
+	cout<<"\t"<<endl;	
+	cout<<"FCFS:"<<endl;
+	for(i=0;i<Number;i++)
+	{
+		
+		if(i<1)
+		{
+			cout<<"时刻"<<l<<":进程"<<i+1<<"在运行"<<endl;
+		}
+		else
+		{
+			cout<<"时刻"<<process[i-1].wancheng<<":进程"<<i+1<<"在运行"<<endl;
+		}
+	}
+	cout<<setw(10)<<"进程ID"<<"    ";
+	cout<<setw(10)<<"完成时间"<<"    ";
+	cout<<setw(10)<<"周转时间"<<"    ";
+	cout<<setw(10)<<"带权周转时间"<<"    "<<endl;
+	for(i=0;i<Number;i++)
+	{
+	  cout<<setw(10)<<i+1<<"    ";
+	  cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].wancheng<<"    ";
+	  cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].zhouzhuan<<"    ";
+	  cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].daiquan<<"    "<<endl;
+	}
+	cout<<"平均周转时间为： "<<setiosflags(ios::fixed)<<setprecision(2)<<Fz/Number<<endl;
+	cout<<"平均带权周转时间为："<<setiosflags(ios::fixed)<<setprecision(2)<<Fdq/Number<<endl;
+		}
+	
+		if(n==2||n==3){
+	cout<<"\t"<<endl;		
+	cout<<"SJF:"<<endl;
+	for(i=0;i<Number;i++)
+	{
+		
+		if(i<1)
+		{
+			cout<<"时刻"<<l<<":进程"<<i+1<<"在运行"<<endl;
+		}
+		else
+		{
+			cout<<"时刻"<<process[i-1].wan<<":进程"<<i+1<<"在运行"<<endl;
+		}
+	}
+	cout<<setw(10)<<"进程ID"<<"    ";
+	cout<<setw(10)<<"完成时间"<<"    ";
+	cout<<setw(10)<<"周转时间"<<"    ";
+	cout<<setw(10)<<"带权周转时间"<<"    "<<endl;
+	for(i=0;i<Number;i++)
+	{
+		cout<<setw(10)<<i+1<<"    ";
+		cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].wan<<"    ";
+		cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].zhou<<"    ";
+		cout<<setw(10)<<setiosflags(ios::fixed)<<setprecision(2)<<process[i].dai<<"    "<<endl;
+	}
+	cout<<"平均周转时间为： "<<setiosflags(ios::fixed)<<setprecision(2)<<Sz/Number<<endl;
+	cout<<"平均带权周转时间为："<<setiosflags(ios::fixed)<<setprecision(2)<<Sdq/Number<<endl;
+	cout<<"\t"<<endl;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+	
