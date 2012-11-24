@@ -1,0 +1,155 @@
+FCFS和SJF算法
+#include "stdio.h" 
+#include"stdlib.h" 
+#include"string.h"
+#define M 50 
+struct sjf{  
+   int jobnumber;  
+   float submittime;  
+   float runtime;  
+   float starttime;  
+   float finishtime;  
+   float waittime;  
+   float turnaroundtime; 
+}temp; 
+static struct sjf st[M];  
+void input(struct sjf *p,int N)
+{ 
+   int i;  
+   printf("Please input the job number,submit time and run time:\nFor exmple:1 8.5 2.0\n");    for(i=0;i<N;i++)  
+   {      
+       scanf("%d%f%f",&p[i].jobnumber,&p[i].submittime,&p[i].runtime);     
+   } 
+} 
+void print(struct sjf *p,int N) 
+{  
+   int k;  
+   float h,g;  
+   printf("run order:");  
+   printf("%d",p[0].jobnumber);     
+   for(k=1;k<N;k++)     
+   printf("-->%d",p[k].jobnumber);     
+   printf("\nThe process's information:\n");     
+   printf("\njobnum\tsubmit\trun\tstart\tfinal\twait\tturnaround\n");     
+   for(k=0;k<N;k++)     
+   {      
+       h+=p[k].turnaroundtime;    
+       printf("%d\t%-.1f\t%-.1f\t%-.1f\t%-.1f\t%-.1f\t%-.1f\t\n",p[k].jobnumber,p[k].submittime,p[k]    
+    }     
+    g=h/N;     
+    printf("\nThe average turnaround time is %-.2f\n",g);     
+} 
+/*按提交时间从小到大排序*/ 
+void sort1(struct sjf *p,int N)
+{  
+int i,j;  
+for(i=0;i<N;i++)     
+   for(j=0;j<=i;j++)       
+     if(p[i].submittime<p[j].submittime)    
+     {     
+      temp=p[i];     
+      p[i]=p[j];      
+      p[j]=temp;    
+      }      
+}   
+/*运行*/ 
+void deal(struct sjf *p,int N) 
+{   
+    int k;  
+    for(k=0;k<N;k++)  
+    { 
+       if(k==0)     
+         {      
+           p[k].starttime=p[k].submittime;      
+           p[k].finishtime=p[k].submittime+p[k].runtime;     
+          }   
+        else    
+          {    
+            if(p[k].submittime>p[k-1].finishtime)     
+              {        
+                 p[k].starttime=p[k].submittime;       
+                 p[k].finishtime=p[k].submittime+p[k].runtime;    
+               }    
+             else      
+               {      
+                 p[k].starttime=p[k-1].finishtime;      
+                 p[k].finishtime=p[k-1].finishtime+p[k].runtime;     
+                }   
+           }   
+      }  
+    for(k=0;k<N;k++)  
+     {   
+        p[k].turnaroundtime=p[k].finishtime-p[k].submittime;
+        p[k].waittime=p[k].starttime-p[k].submittime;     
+      } 
+}  
+void sort2(struct sjf *p,int N) 
+{  
+    int next,m,n,k,i;  
+    float min;  
+    sort1(p,N);  
+    for(m=0;m<N;m++)  
+    {      
+       i=0;   
+       if(m==0)      
+       p[m].finishtime=p[m].submittime+p[m].runtime;      
+       else      
+        {       
+           if(p[m].submittime>p[m-1].finishtime)    
+                  {           
+                      p[m].finishtime=p[m].submittime+p[m].runtime;    
+                   }    
+           else            
+           p[m].finishtime=p[m-1].finishtime+p[m].runtime; 
+          }      
+          for(n=m+1;n<N;n++)      
+          {       
+             if(p[n].submittime<=p[m].finishtime)/*判断内存中每次完成之后又多少到达的进程*/              i++;      
+           }      
+           min=p[m+1].runtime;      
+           next=m+1;      
+           for(k=m+1;k<m+i;k++)/*找出到达后的进程中运行时间最小的进程*/      
+           {       
+              if(p[k+1].runtime<min)       
+              {        
+                 min=p[k+1].runtime;        
+                 next=k+1;       
+               }      
+            }      
+            temp=p[m+1];       
+            p[m+1]=p[next];      
+            p[next]=temp;  
+     }    
+     deal(p,N);     
+     print(p,N);
+}  
+void main() 
+{  
+    int N,i;  
+    printf("Please input the total number of jobs:");  
+    scanf("%d",&N);   
+    input(st,N); 
+loop2:  
+    printf("What kind of algorithm do you want? Please input 1 to select FCFS, or 2 to select SJF or 0 to exit:"
+loop:   
+    scanf("%d",&i);  
+    if(i==0)  
+    exit(1);  
+    else if(i==1)   
+   {   
+      sort1(st,N);   
+      deal(st,N);   
+      print(st,N);   
+      goto loop2;  
+    }  
+    else if(i==2)
+    {  
+     sort2(st,N);  
+     goto loop2;    
+     }    
+    else    
+    {     
+     printf("You have input a wrong number, please input again:");     
+     goto loop;    
+     } 
+}     
