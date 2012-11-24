@@ -1,0 +1,190 @@
+#include<iostream>
+using namespace std;
+#define MAX 20
+struct task_struct
+  {int number;/*进程编号*/
+   char name[15];/*进程名*/
+   float arrive_time;/*到达时间*/
+   float begin_time;/*运行开始时间*/
+   float end_time;/*运行结束时间*/
+   float run_time;/*运行时间*/
+   int run_order;/*运行次序*/
+   int run_sign;/*调度标志*/
+   }tasks[MAX];
+int count;/*实际进程个数*/
+int FCFS();/*先来先服务*/
+int SJF();/*短作业优先*/
+int HRRN();/*最高响应比优先*/
+int input();/*进程参数的输入*/
+int output();/*调度结果的输出*/
+int _tmain(int argc, _TCHAR* argv[])
+{int x;/*选择*/
+ input();
+ cout<<"请选择调度算法（0-3）:"<<""<<endl;
+ cout<<"1.先来先服务"<<endl;
+ cout<<"2.短作业优先"<<endl;
+ cout<<"3.最高响应比优先"<<endl;
+ cout<<"0.退出"<<endl;
+ cin>>x;
+if(x=0)
+ {
+  cout<<"运行结束"<<endl;
+  }
+  if(x=1){cout<<"先来先服务调度"<<endl;
+         FCFS();
+         output();
+		
+  }
+  if(x=2){cout<<"短作业优先调度"<<endl;
+         SJF();
+         output();
+  }
+  if(x=3){cout<<"最高响应比优先"<<endl;
+         HRRN();
+         output();
+         
+ }
+ }
+ int FCFS()/*先来先服务*/
+ {
+  int i;
+  int s;
+  float t=0;
+  t=tasks[0].arrive_time;
+  for (i=0;i<count;i++)
+  {
+   tasks[i].begin_time=t;
+   tasks[i].end_time=tasks[i].begin_time+tasks[i].run_time;
+   tasks[i].run_sign=1;
+   t=tasks[i].end_time;
+   s=i;
+   tasks[s].run_order=i+1;
+  }
+  return 0;
+ }
+ 
+int SJF()/*短作业优先*/
+ {
+  float t=0;
+  int i=0,j;
+  int s,c;
+  float run_time;
+  run_time=tasks[i].run_time;
+  j=1;
+  while((j<count)&&(tasks[i].arrive_time==(tasks[j].arrive_time)))
+    {
+     if(tasks[j].run_time<tasks[i].run_time)
+       {
+        run_time=tasks[j].run_time;
+        i=j;
+       }
+      j++;
+    }
+   s=i;
+   tasks[s].begin_time=tasks[s].arrive_time;
+   tasks[s].end_time=tasks[s].begin_time+tasks[s].run_time;
+   tasks[s].run_sign=1;
+   c=1;
+   while(c<count)
+   {
+    for(j=0;j<count;j++)
+     {
+      if((tasks[j].arrive_time<=t)&&(!tasks[j].run_sign))
+      {
+       run_time=tasks[j].run_time;
+       s=j;
+       break;
+      }
+    for(j=0;j<count;j++)
+     {
+      if((tasks[j].arrive_time<=t)&&(!tasks[j].run_sign))
+         if(tasks[j].run_time<run_time)
+          {
+           run_time=tasks[j].run_time;
+           s=j;
+          }
+     }
+     tasks[s].begin_time=t;
+     tasks[s].end_time=tasks[s].begin_time+tasks[s].run_time;
+     tasks[s].run_sign=1;
+     t=tasks[s].end_time;
+     c++;
+     tasks[s].run_order=c;
+     }
+     return 0;
+   }
+}
+int HRRN()/*最高响应比优先*/
+ {
+  int j,s,c;
+  float t,respond_rate, max_respond_rate;
+  tasks[0].begin_time=tasks[0].arrive_time;
+  tasks[0].end_time=tasks[0].begin_time+tasks[0].run_time;
+  t=tasks[0].end_time;
+  tasks[0].run_sign=1;
+  tasks[0].run_order=1;
+  c=1;
+  while(c<count)
+  {
+   max_respond_rate=0;
+   for(j=1;j<count;j++)
+   {
+    if((tasks[j].arrive_time<=t)&&(!tasks[j].run_sign))
+    {
+     respond_rate=(t-tasks[j].arrive_time)/tasks[j].run_time;
+     if(respond_rate< max_respond_rate)
+      {
+       max_respond_rate=respond_rate;
+       s=j;
+      }
+    }
+   }/*找响应比高的进程*/
+  tasks[s].begin_time=t;
+  tasks[s].end_time=tasks[s].begin_time+tasks[s].run_time;
+  t=tasks[s].end_time;
+  tasks[s].run_sign=1;
+  c++;
+  tasks[s].run_order=c;
+  }
+  return 0;
+ }
+ int input()
+ {
+  int i;
+  cout<<"请输入进程个数："<<endl;
+  cin>>count;
+ 
+  for(i=0;i<count;i++)
+  {
+   cout<<"请输入进程的序号："<<endl;
+   cout<<"请输入进程名："<<endl;
+   cin>>tasks[i].name;
+   cout<<"请输入进程的编号："<<endl;
+   cin>>tasks[i].number;
+   cout<<"请输入到达时间："<<endl;
+   cin>>tasks[i].arrive_time;
+   cout<<"请输入运行时间："<<endl;
+   cin>>tasks[i].run_time;
+   tasks[i].begin_time=0;
+   tasks[i].end_time=0;
+   tasks[i].run_order=0;
+   tasks[i].run_sign=0;
+  }
+  return 0;
+ }
+ int output()
+ {
+  int i;
+  float turn_round_time=0,f,w=0;
+  cout<<"name number arrive_time run_time begin_time end_time run_order turn_round_time";
+  for(i=0;i<count;i++)
+  {
+   f=tasks[i].end_time-tasks[i].arrive_time;
+   turn_round_time+=f;
+   w+=(f/tasks[i].run_time);
+  cout<<"tasks[i].name"<<"tasks[i].number"<<"tasks[i].arrive_time"<<"tasks[i].run_time"<<"tasks[i].begin_time"<<"tasks[i].end_time"<<"tasks[i].run_order"<<"f";
+  }
+ cout<<"平均周转时间="<<turn_round_time/count<<endl;
+ cout<<"平均带权周转时间="<<w/count;
+ return 0;
+ }
