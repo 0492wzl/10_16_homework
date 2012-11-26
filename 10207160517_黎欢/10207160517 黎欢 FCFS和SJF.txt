@@ -1,0 +1,176 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+static const int Max=100;
+int ArrivalTime[Max];//到达时间
+int ServiceTime[Max];//服务时间
+int FinishTime[Max];//完成时间
+int WholeTime[Max];//周转时间
+double WeightWholeTime[Max];//带权周转时间
+double AverageWT_FCFS，AverageWT_SJF;//平均周转时间
+double AverageWWT_FCFS，AverageWWT_SJF;//平均带权周转时间
+int ServiceTime_SJF[Max];//在SJK算法中使用到
+int Num=0;
+int NowTime=0;//记录当前时间
+double SumWT=0,SumWWT=0;//SumWT用来计算总的周转时间，SumWWT用来计算总的带权周期时间
+int i;
+int choice;//记录选择
+//先来先服务算法
+void FCFS()//找到最早到达的
+{
+   cout<<"----------------------------------------"<<endl;
+   cout<<"----------------FCFS--------------------"<<endl;
+   cout<"-----------------------------------------"<<endl;
+   for (i=0;i<Num;i++)
+    {
+      if (ArrivalTime[i]>NowTime)//假如进程的到达时间比现在运行的时间NowTime大，说明在NowTime时刻进程未到达
+       {
+        NowTime=ArrivalTime[i];//把进程的到达时间赋给NowTime
+        }
+        NowTime+=ServiceTime[i];//把进程的服务时间加到NowTime上
+        FinishTime[i]=NowTime;//计算完成时间
+        WholeTime[i]=FinishTime[i]-ArrivalTime[i];//计算周转时间=完成时间-到达时间
+        WeightWholeTime[i]=(double)WholeTime[i]/ServiceTime[i];//计算带权周转时间=周转时间/服务时间
+        SumWT+=WholeTime[i];//计算总的周转时间
+        SumWWT+=WeightWholeTime[i];//计算总的带权周转时间
+    }
+    AverageWT_FCFS=SumWT/Num;//平均周转时间
+    AverageWWT_FCFS=SumWWT/Num;//平均带权周转时间
+    for (i=0;i<Num;i++)//依次输出时间
+    {
+       cout<<"时刻"<<FinishTime[i]-ServiceTime[i]<<":进程"<<i+1<<"开始运行"<<"其完成时间："<<FinishTime[i]<<"周转时间："<<WholeTime[i]<<setprecision(3)<<"带权周转时间："<<WeightWholeTime[i]<<setprecision(3)<<endl;
+      }
+     cout<<"平均周转时间："<<AverageWT_FCFS<<endl;
+     cout<<"平均带权周转时间："<<AverageWWT_FCFS<<endl;
+}
+ //短作业优先算法
+void SJF()//找已经到达的且服务时间最短的进程（假定输入的进程是按照到达时间的先后输入的）
+{
+   cout<<--------------------------------------<<endl;
+   cout<<--------------SJF----------------------<<endl;
+   cout<<----------------------------------------<<endl;
+  int min=0;
+  NowTime=ArrialTime[0]+ServiceTime[0];//计算第一次的NowTime
+  FinishTime_SJF=0;
+  ServiceTime_SJF[0]=1000;//赋初值
+  cout<<"时刻"<<FinishTime[0]-ServiceTime[0]<<":进程"<<1<<"开始运行。";
+  int allin=0,j,k;
+  for(i=1;i<Num;i++)//进入循环，从第二个到达的进程开始
+ {
+   k=1;min=0;
+   if(allin==0)//找到已经到达的进程个数
+   {
+     j=0;
+     while(ArrivalTime[j]<=NowTime && j<Num)//已经到达的进程
+      {
+        j++;
+        if(j>Num)
+        {
+          allin=1;
+      }
+   }
+}
+else
+  {
+    j=Num;
+   }
+j=j-1;//是已经到达的进程数
+while(k<=j)//从已经到达的进程里找到服务时间最短的进程
+  {
+     if (ServiceTime_SJF[k]==0
+          k++;
+   else
+  {
+    if(ServiceTime_SJF[min]>ServiceTime_SJF[k]//比较，找到服务时间最短的进程
+       min=k; 
+       k++;
+}
+}
+  ServiceTime_SJF[min]=0;//找完后置零，便于下一次循环使用
+  NowTime+=ServiceTime[min];//累加当前时间
+  FinishTime[min]=NowTime;//完成时间
+}
+for（i=0;i<Num;i++)//计算周转时间，带权周转时间，总的周转时间和总的带权周转时间
+{
+    WholeTime[i]=FinishTime[i]-ArrivalTime[i];
+    WeightWholeTime[i]=(double)WholeTime[i]/ServiceTime[i];
+    SumWT+=WholeTime[i];
+    SumWWT+=WeightWholeTime[i];
+}
+   AverageWT_SJF=SumWT/Num;//平均周转时间
+   AverageWWT_SJF=SumWWT/Num;
+   cout<<" 其完成时间："<<FinishTime[0]<<" 周转时间："<<WholeTime[0]<<setprecision(3)<<"带权周转时间:"<<WeightWholeTime[0]<<setprecision(3)<<endl;
+    for(i=0;i<Num;i++)//输出结果
+   {
+     cout<<"时刻"<<FinishTime[i]-ServiceTime[i]<<":进程"<<i+1<<"开始运行。"<<"其完成时间："<<FinishTime[i]<<"周转时间："<<WholeTime[i]<<setprecision(3)<<"带权周转时间："<<WeightWholeTime[i]<<setprecision(3)<<endl;
+      }
+     cout<<"平均周转时间："<<AverageWT_SJF<<endl;
+     cout<<"平均带权周转时间："<<AverageWWT_SJF<<endl;
+
+}
+//***********************************************
+//             输入函数
+//***********************************************
+void  input()
+{
+   cout<<"请输入进程个数：";
+   cin>>Num;
+   while（Num>100||Num<=0)
+     {
+       cout<<"进程个数必须大于0且小于等于100！请重新输入进程个数：";
+       cin>>Num;
+      }
+    cout<<"-------------------------------"<<endl;
+    for(i=0;i<Num;i++)
+    {
+      int data=0;
+      cout<<"请输入第"<<i+1<<个进程的服务时间：";
+      cin>>data;
+      ServiceTime[i]=data;
+      ServiceTime_SJF[i]=data;
+   }  
+  cout<<"---------------"<<endl;
+  cout<<"请选择要使用的算法（1-FCFS,2-SJF):";
+  cin>>choice;
+}
+//***********************************************
+//               主函数
+//***********************************************
+void main()
+{
+   char<<flag='y';
+Loop:
+    NowTime=0;SumWT=0;SumWWT=0;//参数初始化
+    input();//输入
+    if（choice==1）
+        FCFS();
+      else if(choice==2)
+       SJF();
+   else//输入有误，则重新选择
+    {
+      while(1)
+       {
+          cout<<"您的选择有误！请重新选择！<<endl;
+          cout<<"请选择要使用的算法（1-FCFS,2-SJF):";
+          cin>>choice;
+         if(choice==1)
+          {
+            FCFS();
+            break;
+           }
+      else if(choice==2)
+       {
+          SJK();
+          break;
+      }
+  }
+}
+  cout<<endl<<" 是否继续使用该程序，按Y或者y继续，按其他任意键退出：";
+  cin>>flag;
+  if(flag=='y'||flag=='Y')
+     goto Loop;
+
+   
+ 
+
+        
