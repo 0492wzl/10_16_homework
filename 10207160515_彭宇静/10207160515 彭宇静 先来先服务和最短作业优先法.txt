@@ -1,0 +1,193 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+#define MaxNum 100
+   int ArrivalTime [MaxNum];
+   double ServiceTime [MaxNum];
+   double FinishTime [MaxNum];
+   double WholeTime [MaxNum];
+   double WeightWholeTime [MaxNum];
+   double a[MaxNum];
+   int  b[MaxNum];
+   void FCFS();
+   void SJF();
+
+   void FCFS()
+     { 
+        int ProcessNum;
+        cout<<"--------先来先服务算法-------";
+        cout<<"请输入进程个数：";
+        cin>>ProcessNum;
+        cout<<"输入进程到达时间:";
+        cout<<endl;
+        for(int i=0;i<ProcessNum;i++)
+          {  
+             cin>>ArrivalTime[i];
+           }
+        cout<<endl;
+        cout<<"请输入进程服务时间："<<endl;
+        for(int i=0;i<ProcessNum;i++)
+          {
+             cin>>ServiceTime[i];
+           }
+        cout<<endl;
+        for(int i=0;i<ProcessNum;i++)
+          {
+             FinishTime[i]=ServiceTime[i];
+           }
+        for(int i=0;i<ProcessNum;i++)
+          {
+             FinishTime[i+1]=FinishTime[i]+FinishTime[i+1];
+           }
+        for(int i=0;i<ProcessNum-1;i++)
+          {
+            cout<<"时刻"<<FinishTime[i]<<":第"<<i+2<<"个进程开始运行。"<<endl;
+           }
+        for(int i=0;i<ProcessNum;i++)
+          {//求周转时间和带权周转时间
+            WholeTime[i]=FinishTime[i]-ArrivalTime[i];
+            WeightWholeTime[i]=(double)(WholeTime[i]*1.00/ServiceTime[i]);
+           }
+        cout<<"完成时间为：";
+        for(int i=0;i<ProcessNum-1;i++)
+          {
+             cout<<FinishTime[i]<<"  ";
+           }
+        cout<<endl;
+        cout<<"周转时间为：";
+        for(int i=0;i<ProcessNum-1;i++)
+          {
+             cout<<WholeTime[i]<<"  ";
+           }
+        cout<<endl;
+        cout<<"带权周转时间为:";
+        for(int i=0;ProcessNum;i++)
+        {
+          cout<<setprecision(3)<<WeightWholeTime[i]<<"  ";
+         }
+        cout<<endl;
+      }
+   void SJF()
+     {
+       int ProcessNum;
+       cout<<"--------短作业优先算法-------"<<endl;
+       cout<<"请输入进程个数：";
+       cin>>ProcessNum;
+       cout<<"输入进程到达时间:"<<endl;
+       for(int i=0;i<ProcessNum;i++)
+         {
+            cin>>ArrivalTime[i];
+          }
+       cout<<endl;
+       for(int i=0;i<ProcessNum;i++)
+         {
+            cin>>ServiceTime[i];
+          }
+       cout<<endl;
+       for(int i=0;i<ProcessNum;i++)
+         {
+            cin>>ServiceTime[i];
+          }
+       cout<<endl;
+       for(int i=0;i<ProcessNum;i++)
+         {
+            a[i]=ServiceTime[i];
+          }
+       for(int i=0;i<ProcessNum-1;i++)
+         {//实现从第一位开始排序
+           double c;
+           for(int j=i+1;j<ProcessNum;j++)
+             {
+                if (a[i]>a[j])
+                   {
+                      c=a[i];
+                      a[i]=a[j];
+                      a[j]=c;
+                     }
+               }
+           }
+        FinishTime[0]=ServiceTime[0];
+        for (int i=1;i<ProcessNum;i++) //获取数组下标
+          {
+             for (int j=1;j<ProcessNum;j++)
+               {
+                   if(a[i]==ServiceTime[j])
+                     {
+                        b[j]=j;
+                        break;
+                      }
+                 }
+            }
+        for(int i=1;i<ProcessNum;i++)
+          {
+            if(FinishTime[b[i-1]]<ArrivalTime[b[i]])
+              {
+                int temp;
+                temp =b[i];
+                b[i]=b[i+1];
+                b[i+1]=temp;
+               }
+            a[i]=ServiceTime [b[i]];
+            a[i]=a[i-1]+a[i];
+            FinishTime[b[i]]=a[i];
+          }
+       for(int i=0;i<ProcessNum-1;i++)
+         {
+           cout<<"时刻"<<FinishTime[i]<<":第"<<i+2<<"个进程开始运行"<<endl;
+          }
+       for(int i=0;i<ProcessNum;i++)
+         {//求周转时间和带权周转时间
+           WholeTime[i]=FinishTime[i]-ArrivalTime[i];
+           WeightWholeTime[i]=(double)(WholeTime[i]*1.00/ServiceTime[i]);
+          }
+       cout<<"完成时间为：";
+       for(int i=0;i<ProcessNum;i++)
+	{
+		cout<<FinishTime[i]<<"  ";
+	}
+	cout<<endl;
+	cout<<"周转时间为：";
+	for(int i=0;i<ProcessNum;i++)
+	{
+		cout<<WholeTime[i]<<"  ";
+	}
+	cout<<endl;
+	cout<<"带权周转时间为：";
+	for(int i=0;i<ProcessNum;i++)
+	{
+		cout<<setprecision(3)<<WeightWholeTime[i]<<"  ";
+	}
+	cout<<endl;
+      }
+   void main()
+     {
+	char flag='Y';
+	char n;
+	cout<<"----------调度算法FCFS && SJF----------"<<endl;;
+	while(flag=='Y'||flag=='y')
+	  { 
+	    cout<<endl;
+	    cout<<"1、先来先服务 FCFS 算法  "<<endl;
+	    cout<<"2、最短作业优先 SJF 算法 "<<endl;
+	    cout<<"请选择算法的序号：";
+	    cin>>n;
+	    switch(n)
+	      {
+		case'1':
+		  FCFS();
+		break;
+	        case'2':
+		  SJF();
+		break;
+		default:
+			cout<<endl;
+			cout<<"输出有误!"<<endl;
+		break;
+		}
+		cout<<endl;
+		cout<<"是否继续调度算法FCFS && SJF，按'Y'or'y'钮继续,按照'N'or'n'键退出";
+		cin>>flag;
+            cout<<endl;
+	  }
+       cout<<endl;
+}
