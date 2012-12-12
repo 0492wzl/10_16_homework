@@ -1,0 +1,159 @@
+10207160494-yanzhuozhi
+======================
+// 调度算法1.cpp : 定义控制台应用程序的入口点
+
+#include "stdafx.h"
+#include<iostream>
+using namespace std;
+struct as
+{
+  const static int MaxNum=100;   //定义进程的最大总数
+	double ATime[MaxNum];   //到达时间
+	double STime[MaxNum];   //服务时间
+	double FTime[MaxNum];   //完成时间
+	double WTime[MaxNum];   //周转时间
+	double WWTime[MaxNum];  //带权周转时间
+	double AWT_FCFS;        //定义FCFS平均周转时间
+	double AWWT_FCFS;       //定义FCFS平均带权周转时间
+	double AWT_SJF;         //定义SJF平均周转时间
+	double AWWT_SJF;        //定义SJF平均带权周转时间
+
+};
+
+int main()
+{
+	cout<<"请输入进程总的个数n(n为整数且n<n<=100):"<<endl;
+	cin>>n;
+	while(n<1)
+	{
+		cout<<"你输入的n值不合适，请重新输入！"<<endl;
+		cin>>n;
+	}
+	cout<<"请按照进程到达的时间由小到大依次输入n个进程的到达时间，以空格隔开："<<endl;
+	for(int i=0;i<n;i++)
+	cin>>ATime[i];
+        cout<<"请按上面的顺序依次输入各个进程的服务时间，以空格隔开："<<endl;
+	for(int i=0;i<n;i++)
+		cin>>STime[i];
+	FCFS(ATime,STime,n); //调用FCFS子程序
+	SJF(ATime,STime,n); //调用SJF子程序
+}
+
+void FCFS(double *ATime,double *STime,double n)
+{
+	FTime[0]=ATime[0]+STime[0];
+	WTime[0]=FTime[0]-ATime[0];
+	WWTime[0]=WTime[0]/STime[0];
+	AWT_FCFS=WTime[0];
+	AWWT_FCFS=WWTime[0];
+	for(int i=1;i<n;i++)
+	{
+		if(FTime[i-1]>ATime[i]||FTime[i-1]==ATime[i])
+			FTime[i]=FTime[i-1]+STime[i];
+		else FTime[i]=FTime[i]+STime[i];
+		     WTime[i]=FTime[i]-ATime[i];
+			 WWTime[i]=WTime[i]/STime[i];
+			 AWT_FCFS+=WTime[i];
+			 AWWT_FCFS+=WWTime[i];
+	}
+
+	AWT_FCFS/=n;   //求FCFS平均周转时间
+	AWWT_FCFS/=n;   //求FCFS平均带权周转时间
+	cout<<endl;
+	cout<<"完成时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<FTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"周转时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<WTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"带权周转时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<WWTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"FCFS平均周转时间为: "<<AWT_FCFS<<endl;
+	cout<<"FCFS平均带权周转时间为: "<<AWWT_FCFS<<endl;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	return 0;
+}
+
+void SJF(double *ATime,double *STime,double n)
+{
+	int end[MaxNum];  //用于标记进程i是否已经执行，已执行则end[i]=1;否则end[i]=0
+	for(int k=0;k<n;k++)
+		end[k]=0;
+	int temp,now,next=1,p=1; //now表示刚执行完的进程号，next表示下一个要执行的进程号
+	FTime[0]=ATime[0]+STime[0];
+	WTime[0]=FTime[0]-STime[0];
+	WWTime[0]=WTime[0]/STime[0];
+	AWT_SJF=WTime[0];
+	AWWT_SJF=WWTime[0];
+	now=0;
+	end[now]=1;  //执行完的进程设置为1
+	for(int i=1;i<n;i++)
+	{
+		int j;
+		for(j=1;j<n;)  //判断第now个进程完成时，到达的最后一个进程的号码，用temp表示
+		{
+			if(ATime[j]<FTime[now]||ATime[j]==FTime[now])
+			{
+				j++;
+			}
+			else break;
+		}
+		temp=j;
+		int min=p;
+		for(int j=1;j<=temp;j++) //寻找下一个要执行的进程next
+		{
+			if(STime[min]>STime[j]&&end[j]=0)
+			{
+				min=j;
+			}
+		}
+		next=min;
+	//执行第next个进程
+	FTime[next]=FTime[now]+STime[next];
+	WTime[next]=FTime[next]-ATime[next];
+	WWTime[next]=WTime[next]/STime[next];
+	AWT_SJF+=WTime[next];
+	AWWT_SJF+=WWTime[next];
+	end[next]=1;
+	now=next;
+	next=p;
+	while(end[p]!=0)
+	{
+		p++;
+	}
+	}
+	AWT_SJF/=n;   //求SJF平均周转时间
+	AWWT_SJF/=n;   //求SJF平均带权周转时间
+	cout<<endl;
+	cout<<"完成时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<FTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"周转时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<WTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"带权周转时间为: ";
+	for(int i=0;i<n;i++)
+	cout<<WWTime[i]<<" ";
+	cout<<endl;
+
+	cout<<"SJF平均周转时间为: "<<AWT_SJF<<endl;
+	cout<<"SJF平均带权周转时间为: "<<AWWT_SJF<<endl;
+}
+
+
+
+
