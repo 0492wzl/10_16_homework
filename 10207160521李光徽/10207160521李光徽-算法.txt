@@ -1,0 +1,117 @@
+#include <iostream> 
+using namespace std; 
+char process[5]="";
+int arrivetime[5];
+int servicetime[5];
+ int finishtime[5];
+ int zhoutime[5];
+double avertime;
+int input(); 
+void FCFS(); 
+void output(); 
+void show(int* arr,int len); 
+ int Length(char* process) 
+{ int i;
+ int count=0;
+ for(i=0;i<5;i++) 
+{ if(process[i]=='#') break;
+ count++;
+ } 
+return count;
+}
+ int sum(int* a,int i)
+ { int s=0; 
+for(int j=0;j<i;j++) 
+s+=a[j]; 
+return s; 
+} 
+void show(int* arr,int len) 
+{ for(int j=0; j<len; j++) 
+{ cout << arr[j] << " } 
+cout <<endl; }
+ 
+int input()
+ { cout << "      输入进程名：" << endl; 
+int i=0;
+ while(i<5) 
+{ cin>>process[i];
+ if(process[i]=='#')
+ { // } i++; } 
+int len=Length(process); 
+cout << "依次输入进程到达时间:" << endl; 
+for(int j=0; j<len; j++) 
+{ cin >> arrivetime[j]; }
+ cout << "依次输入运行时间:" <<endl;
+ process[i]=NULL; 
+break; ";
+for(j=0; j<len; j++)
+ { cin >> servicetime[j]; } 
+return len; }
+ 
+void FCFS(int len) 
+{  finishtime[0]=arrivetime[0]+servicetime[0]; 
+for(int j=1;j<len; j++)
+{ finishtime[j]=sum(servicetime,j+1); 
+}
+for(j=0; j<len; j++)
+ { zhoutime[j]=finishtime[j]-arrivetime[j]; } 
+avertime=sum(zhoutime,len)/len; }
+ void output()
+ { cout <<endl<<endl; 
+cout <<"               "<<endl; 
+int len=Length(process); 
+for(int j=0; j<len; j++) 
+{ cout <<process[j] << " } cout << endl;
+ 
+show(arrivetime,len);
+
+show(servicetime,len); 
+cout <<endl<<endl;
+
+show(finishtime,len); 
+show(zhoutime,len); 
+cout << "平均周转时间 :" << avertime << endl; ";
+cout <<"                     "<<endl; } 
+int main() 
+{ cout << "            先来先服务算法          " << endl; 
+int len = input();
+ FCFS(len); 
+output();
+ system("PAUSE"); 
+return 0;
+ }
+
+
+SJF
+#include<iostream> 
+using namespace std;
+void B(float a[],int size)
+ { float t;
+ for(int i=1;i<size;i++) 
+{ for(int j=0;j<size-1;j++)
+ if(a[j]>a[j+1]) 
+{ t=a[j];
+a[j]=a[j+1];
+a[j+1]=t; }
+ } 
+}
+ int main()
+ { float n,a[100]; 
+double s[100],T=0; 
+cout<<"请输入作业数:"<<endl;
+ cin>>n; 
+cout<<"请分别输入各作业所运行的时间:"<<endl;
+ for(int i=0;i<n;i++) 
+cin>>a[i]; 
+B(a,n); 
+cout<<"作业调度顺序为:"<<endl; 
+for(i=0;i<n;i++) 
+{ cout<<a[i]<<" "; 
+s[0]=0; 
+s[i+1]=s[i]+a[i]; 
+T=T+s[i+1]; 
+}
+ cout<<endl; 
+cout<<"平均周转时间为:"<<T/n<<endl;
+ return 0; 
+}
