@@ -1,0 +1,23 @@
+library copf;
+　　uses
+　　SysUntils,
+　　Classes;
+　　Procedure copyfile(Sfname.Dfname:string):far;export;//带路径的文件名；
+　　Var
+　　Sourcef,Destinef:file;
+　　NumRead,NumWritten: Integer;
+　　Buf: array[1..4096] of Char;//定义缓冲区；
+　　Begin
+　　AssignFile(Sourcef,Dfname);
+　　Reset(Sourcef,1);
+　　AssignFile(Destinef,Dfname);
+　　Rewrite(Destinef,1);
+　　Repeat
+　　BlockRead(Sourcef,Buf,Size Of(Buf),NumRead);//读源文件；
+　　BlockWrite(Destinef,Buf,NumRead,NumWritten);//写目标文件；
+　　Until (NumRead = 0) or (NumWritten<>NumRead);
+　　CloseFile(Soucef);
+　　CloseFile(Destinef);
+　　End;
+　　Exports
+　　Copyfile;//输出过程；
