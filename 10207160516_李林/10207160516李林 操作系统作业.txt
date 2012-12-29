@@ -1,0 +1,96 @@
+#include<sys/file.h>
+#include<sys/types.h>                                        
+#include<stdio.h>
+#include <stdlib.h>
+int main(){
+int pid1,pid2;
+while(pid1=fork()==-1){{
+      exit(0);
+    }
+   if(pid1==0){
+      printf("b");         
+    }
+
+while(pid2=fork()==-1){
+       exit(0);
+    }
+    if(pid2==0){
+       printf("c");         
+    }
+   else printf("a");         
+}
+
+
+
+#include<sys/file.h>
+#include<sys/types.h>                                        
+#include<stdio.h>
+#include <stdlib.h>
+int main(){
+int pid1,pid2;
+while(pid1=fork()==-1){
+      exit(0);
+    }
+     if(pid1==0){
+       for(int i=0;i<100;i++){
+          printf(i);
+      }         
+    }
+while(pid2=fork()==-1){
+       exit(0);
+    }
+   else if(pid2==0){
+       for(int i=0;i<100;i++){
+          printf(i);
+      }           
+    }
+   else for(int i=0;i<100;i++){
+          printf(i);
+     }         
+
+
+
+#include<sys/file.h>
+#include<sys/types.h>                                        
+#include<stdio.h>
+#include <stdlib.h>
+int main(){
+int pid1,pid2;
+while(pid1=fork()==-1){
+      exit(0);
+    }  
+    if(pid1==0)
+  {
+    lockf(1,1,0);
+    for(int i=0;i<100;i++){
+          printf(i);
+     }
+    lockf(1,0,0);
+   }
+while(pid2=fork()==-1){
+       exit(0);
+    } 
+   if(pid2==0)
+  {
+    lockf(1,1,0);
+    for(int i=0;i<100;i++){
+          printf(i);
+     }
+     lockf(1,0,0);
+    }
+   else 
+
+  {  
+     lockf(1,1,0);
+     for(int i=0;i<100;i++){
+          printf(i);
+     }         
+     lockf(1,0,0);                        
+  }
+1.fork函数总是“调用一次，返回两次”，在父进程中调用一次，在父进程和子进程中各返回一次。fork在子进程中的返回值是0，而在父进程中的返回值则是子进程的id。
+
+2.子进程在创建的时候会复制父进程的当前状态（PCB信息相同，用户态代码和数据也相同）。child1在创建之前child2还没有创建，因而child1复制了当时parent的状态。child2一样。
+
+3.父进程与子进程交替执行，顺序并不一定，主要取决于CPU对他们的调度。
+
+4.lockf函数实现了进程间的互斥，即是当子进程1获得处理器的时候，其他进程就只能等待其解除lockf时，才能获得处理器进行实行。而不能同时实行造成时间融合。
