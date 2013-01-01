@@ -80,13 +80,14 @@ namespace os_diaodu
 
         private void SUMMIT_Click(object sender, EventArgs e)
         {
-            int[]p={a[0].T_arrived,a[1].T_arrived,a[3].T_arrived};
+           // int[]p={a[0].T_arrived,a[1].T_arrived,a[3].T_arrived};
             receive_form();
             if (FCFS.Checked) 
             {
-                sort_Array(p);
+               
+                MessageBox.Show("您已经选择了FCFS调度算法");
             }
-            if (SPF.Checked) MessageBox.Show("nihaoa");
+            if (SPF.Checked) MessageBox.Show("您已经选择了SPF调度算法");
             this.Dispose();
         }
 
