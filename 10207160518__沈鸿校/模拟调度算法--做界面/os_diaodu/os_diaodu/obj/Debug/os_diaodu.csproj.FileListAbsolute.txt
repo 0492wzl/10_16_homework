@@ -1,0 +1,10 @@
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\bin\Debug\os_diaodu.exe
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\bin\Debug\os_diaodu.pdb
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\ResolveAssemblyReference.cache
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.Properties.Resources.resources
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.csproj.GenerateResource.Cache
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.exe
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.pdb
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.input_data.resources
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.about.resources
+D:\文件\大三课件\C#\c#zuoye\os_diaodu\os_diaodu\obj\Debug\os_diaodu.btn_color.resources
