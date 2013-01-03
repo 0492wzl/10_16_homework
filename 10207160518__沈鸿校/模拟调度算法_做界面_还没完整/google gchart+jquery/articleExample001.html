@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html public "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="Keywords" content="沈鸿校" />
+	<meta name="Description" content="这是一个简单YES!B/S!文章示例页面,来自杨正祎的博客,http://justinyoung.cnblogs.com/" />
+	<title>gchart 图表</title>
+<title>gchart简单示例</title>
+<style type="text/css">
+#basicGChart { width: 450px; height: 300px }
+</style>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.gchart.js"></script>
+<script type="text/javascript">
+$(function () {
+	//下载量
+	var array1=[15, 13, 12, 33, 28, 21, 23, 31, 33, 25, 22, 18];
+	//日期数组
+	var array2=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+	$('#basicGChart').gchart({
+		type: 'line',//图表类型
+		title: '操作系统先来先服务算法调度时序图', //图表标题
+		series: [
+			$.gchart.series(array1,'red')//图表数据
+		],
+		axes: [//图表坐标轴
+			$.gchart.axis('left', 0, 100,'blue'),
+			$.gchart.axis('bottom',array2,'008000')
+		],
+		legend: 'top'});
+});
+</script>
+</head>
+<body>
+<h2>一个简单的gchart示例</h2>
+<div id="basicGChart">
+</div>
+</body>
+</html>

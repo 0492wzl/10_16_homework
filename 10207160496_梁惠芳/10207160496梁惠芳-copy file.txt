@@ -1,0 +1,22 @@
+#include <windows.h>
+#include <iostream>
+using namespace std;
+int main()
+{
+    SHFILEOPSTRUCT sf;
+    memset(&sf,0,sizeof(sf));
+    sf.hwnd = 0;
+    sf.wFunc = FO_COPY;
+    sf.pFrom = "d:\\masm32\\*.*";
+    sf.pTo = "d:\\masm33";
+    sf.fFlags = FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_NOERRORUI;
+    int n = SHFileOperation(&sf);
+    if( n == 0)
+    {
+        cout << "Success\n";
+    }
+    else
+    {
+        cout << "Failed\n";
+    }
+}
