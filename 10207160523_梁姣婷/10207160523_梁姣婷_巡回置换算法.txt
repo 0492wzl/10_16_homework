@@ -1,0 +1,21 @@
+ #include <windows.h>
+#include <iostream>
+#include <string>
+
+using namespace std;
+void main() 
+{ 
+	void OnFilecopy(LPCWSTR strFrom ,LPCWSTR strTo);
+	 CopyFile(L"D:\\Green\\a.txt",L"D:\\Green\\b.txt",false);
+} 
+
+void OnFilecopy(LPCWSTR strFrom ,LPCWSTR strTo)   
+{   
+	SHFILEOPSTRUCT   op; 
+	op.hwnd = NULL;
+	op.wFunc = FO_COPY; 
+	op.pFrom = strFrom;
+	op.pTo = strTo;
+	op.fFlags = FOF_WANTNUKEWARNING; 
+	::SHFileOperation(&op);
+}
