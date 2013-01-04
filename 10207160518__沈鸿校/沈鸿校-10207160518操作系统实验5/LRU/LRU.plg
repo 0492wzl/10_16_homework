@@ -1,0 +1,36 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: LRU - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\QQ\AppData\Local\Temp\RSPCCF1.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/LRU.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ  /c 
+"D:\编程工具\VC6\VC6\MyProjects\LRU\lru_f.cpp"
+]
+Creating command line "cl.exe @C:\Users\QQ\AppData\Local\Temp\RSPCCF1.tmp" 
+Creating temporary file "C:\Users\QQ\AppData\Local\Temp\RSPCCF2.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/LRU.pdb" /debug /machine:I386 /out:"Debug/LRU.exe" /pdbtype:sept 
+".\Debug\lru_f.obj"
+]
+Creating command line "link.exe @C:\Users\QQ\AppData\Local\Temp\RSPCCF2.tmp"
+<h3>Output Window</h3>
+Compiling...
+lru_f.cpp
+D:\编程工具\VC6\VC6\MyProjects\LRU\lru_f.cpp(5) : error C2065: 'i' : undeclared identifier
+D:\编程工具\VC6\VC6\MyProjects\LRU\lru_f.cpp(5) : error C2057: expected constant expression
+D:\编程工具\VC6\VC6\MyProjects\LRU\lru_f.cpp(5) : error C2466: cannot allocate an array of constant size 0
+D:\编程工具\VC6\VC6\MyProjects\LRU\lru_f.cpp(5) : error C2133: 'ym' : unknown size
+执行 cl.exe 时出错.
+
+
+
+<h3>Results</h3>
+LRU.exe - 1 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
