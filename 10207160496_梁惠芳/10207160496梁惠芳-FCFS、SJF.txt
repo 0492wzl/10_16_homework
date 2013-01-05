@@ -1,0 +1,147 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+using namespace std;
+    void FCFS();
+    void SJF();
+    static const int MaxNum=100;
+    int ArrivalTime[MaxNum];//到达时间
+    int ServiceTime[MaxNum];//服务时间
+    int FinishTime[MaxNum];//完成时间
+    int WholeTime[MaxNum];//周转时间
+    double WeightWholeTime[MaxNum];//带权周转时间
+    double AverageWT_FCFS,AverageWT_SJF;//平均周转时间
+    double AverageWWT_FCFS,AverageWWT_SJF;//平均带权周转时间
+    int ServiceTime2[MaxNum];//用于计算SJF的量
+    int Data=0;
+    int PNum=0;
+    int NowTime=0;double x=0,y=0;
+    int i;
+
+void main()
+{
+    int a;
+    cout<<"输入进程数：";
+    cin>>PNum;
+    for(i=0;i<PNum;i++)
+    {
+        cout<<"输入第"<<i+1<<"个进程的到达时间："<<endl;
+        cin>>Data;
+        ArrivalTime[i]=Data;
+     }
+    for(i=0;i<PNum;i++)
+    {
+        cout<<"输入第"<<i+1<<"个进程的服务时间："<<endl;
+        cin>>Data;
+        ServiceTime[i]=Data;
+        ServiceTime2[i]=Data;
+     }
+     cout<<"计算类型1-FCFS，2-SJF";
+     cin>>a;
+     if(a==1)
+     {
+         FCFS();
+     }
+     else
+     {
+         SJF();
+      }
+}
+
+void FCFS()
+{
+      cout<<"---------------------------"<<endl;
+      cout<<"             "<<"FCFS"<<"                "<<endl;
+      cout<<"---------------------------"<<endl;
+      for(i=0;i<PNum;i++)
+      { 
+           if(ArrivalTime[i]>NowTime)
+           {
+                NowTime=ArrivalTime[i];
+            }
+            NowTime+=ServiceTime[i];
+            FinishTime[i]=NowTime;
+            WholeTime[i]=FinishTime[i]-ArrivalTime[i];
+            WeightWholeTime[i]=(double)WholeTime[i]/ServiceTime[i]; 
+      } 
+      for(i=0;i<PNum;i++)
+      {
+            x+=WholeTime[i];
+            y+=WeightWholeTime[i];
+       }              
+       AverageWT_FCFS=x/PNum;
+       AverageWWT_FCFS=y/PNum;
+       for(i=0;i<PNum;i++)
+       {
+             cout<<"时刻"<<FinishTime[i]-ServiceTime[i]<<":进程"<<i+1<<"开始运行"<<endl;
+        }
+        cout<<"周转时间："<<"     "<<"带权周转时间"<<endl;
+        for(i=0;i<PNum;i++)
+        {
+              cout<<"                    "<<WholeTime[i]<<setprecision(3)<<""<<WeightWholeTime[i]<<setprecision(3)<<endl;
+         }
+         cout<<"平均周转时间FCFS:"<<AverageWT_FCFS<<endl;
+         cout<<"平均带权周转时间FCFS:"<<AverageWWT_FCFS<<endl;
+}
+
+void SJF()
+{       cout<<"---------------------------"<<endl;
+        cout<<"             "<<"SJF"<<"                "<<endl;
+        cout<<"---------------------------"<<endl;
+        NowTime=0;//SJF
+        x=0;
+        y=0;
+        int smallest;
+        NowTime+=ServiceTime[0];
+        FinishTime[0]=NowTime;
+        ServiceTime2[0]=1000000;
+        cout<<"时刻"<<FinishTime[0]-ServiceTime[0]<<":进程"<<1<<"开始运行"<<endl;      
+        int allin=0,j,k;
+        for(i=0;i<PNum;i++) 
+        {
+             k=1;
+             smallest=0;
+             if(allin==0)
+             {
+                  j=0;
+                  while(ArrivalTime[j]<=NowTime&&j<PNum)
+                  {j++;if(j>=PNum){allin=1;}}
+              }
+              else{j=PNum;}
+              j=j-1;
+              while(k<=j)
+              {
+                   if(ServiceTime2[k]==0){k++;}
+                   else
+                   {
+                        if(ServiceTime2[smallest]>ServiceTime2[k])  
+						{smallest=k;}
+                         k++;
+                    }
+               }
+                ServiceTime2[smallest]=0;
+                NowTime+=ServiceTime[smallest];
+                FinishTime[smallest]=NowTime;
+                cout<<"时刻"<<FinishTime[smallest]-ServiceTime[smallest]<<":进程"<<smallest+1<<"开始运行"<<endl;
+         }
+         for(i=0;i<PNum;i++)
+         {
+                WholeTime[i]=FinishTime[i]-ArrivalTime[i];
+                WeightWholeTime[i]=(double)WholeTime[i]/ServiceTime[i];
+          }
+          cout<<"周转时间："<<"     "<<"带权周转时间"<<endl;
+          for(i=0;i<PNum;i++)
+          {
+              cout<<"                    "<<WholeTime[i]<<setprecision(3)<<""<<WeightWholeTime[i]<<setprecision(3)<<endl;
+          }
+           for(i=0;i<PNum;i++)
+      {
+            x+=WholeTime[i];
+            y+=WeightWholeTime[i];
+       }              
+       AverageWT_SJF=x/PNum;
+       AverageWWT_SJF=y/PNum;
+       cout<<"平均周转时间SJF:"<<AverageWT_SJF<<endl;
+       cout<<"平均带权周转时间SJF:"<<AverageWWT_SJF<<endl;
+}
+

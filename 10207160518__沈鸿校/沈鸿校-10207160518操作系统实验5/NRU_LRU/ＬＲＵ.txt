@@ -1,0 +1,30 @@
+ 4 page framesLRU:0.5437
+ 5 page framesLRU:0.5656
+ 6 page framesLRU:0.5938
+ 7 page framesLRU:0.6188
+ 8 page framesLRU:0.6438
+ 9 page framesLRU:0.6594
+10 page framesLRU:0.6937
+11 page framesLRU:0.7094
+12 page framesLRU:0.7562
+13 page framesLRU:0.7750
+14 page framesLRU:0.7969
+15 page framesLRU:0.8031
+16 page framesLRU:0.8094
+17 page framesLRU:0.8187
+18 page framesLRU:0.8344
+19 page framesLRU:0.8562
+20 page framesLRU:0.8812
+21 page framesLRU:0.8875
+22 page framesLRU:0.9031
+23 page framesLRU:0.9156
+24 page framesLRU:0.9250
+25 page framesLRU:0.9250
+26 page framesLRU:0.9250
+27 page framesLRU:0.9250
+28 page framesLRU:0.9250
+29 page framesLRU:0.9250
+30 page framesLRU:0.9250
+31 page framesLRU:0.9250
+32 page framesLRU:0.9250
+Press any key to continue
