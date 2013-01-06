@@ -1,0 +1,28 @@
+
+#include <windows.h>
+#include <iostream>
+#include <string>
+
+using namespace std; 
+
+int main(void)
+{
+
+   string inp = " ";
+   int pos;
+
+   cout << "copy source, to destination (eg: c:\\, c:\\test): ";
+   getline(cin, inp, '\n');      
+
+   if((pos = inp.find(",")) != string::npos) 
+     {
+
+       string cmd = "copy " + inp.substr(0, pos) + "*.* " +inp.substr(pos + 1);   
+       system(cmd.c_str()); 
+      
+   }   
+
+   return 0;
+}
+输出结果为：
+copy source,to destination<eg:c:\,c:\test>
