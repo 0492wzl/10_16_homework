@@ -1,0 +1,43 @@
+1、
+#include <stdio.h>
+int main()
+{
+         int k;                                                                                                                      k=fork();
+         if(k==0)
+                printf("b,my pid is %d.\n",getpid());
+                                                                                                                                     else if(k>0)
+         {
+                 printf("a ，my pid is %d.\n",getpid());
+                 k=fork();
+                 if(k==0)
+                        printf("c,my pid is %d.\n",getpid());
+                 else if(k>0)
+                        printf("a,my pid is %d.\n",getpid());
+                 else
+                        printf("fork() error.\n");
+         }
+         else printf("fork() error.\n");
+}
+分析：输出的结果没有顺序，改为一句话后，输出的结果依然没有顺序，可能是创建的父进程和子进程的执行是相互独立的，结果的输出没有先后顺序之分。
+
+2、
+#include <stdio.h>
+int main()
+{
+         int k;                                                                                                                      k=fork();
+         if(k==0)
+                printf(lockf(),"Hello,I am b,my pid is %d.\n",getpid());
+                                                                                                                                     else if(k>0)
+         {
+                 printf(lockf(),"Hello,I am a ，my pid is %d.\n",getpid());
+                 k=fork();
+                 if(k==0)
+                        printf(lockf(),"Hello,I am c,my pid is %d.\n",getpid());
+                 else if(k>0)
+                        printf(lockf(),"Hello,I am a,my pid is %d.\n",getpid());
+                 else
+                        printf("fork() error.\n");
+         }
+         else printf("fork() error.\n");
+}
+分析：加了lockf()函数后，程序会按照顺序输出结果，应该是lockf（）函数给父进程和子进程之间加了一个限定，使父、子进程之间必须按顺序输出结果。
