@@ -1,0 +1,17 @@
+#include<iostream>
+using namespace std;
+void loop2 (int *a,int len)
+{    
+int x;    
+for(int k=1;k<=len;k++)  
+      {           
+         x=k;cout<<x<<"";           
+ for(x=a[x];x!=k;x=a[k])         
+   cout<<x<<"";          
+  cout<<endl;       
+  }}
+int main(int argc,char **argv)
+{   
+ int p[]={7,4,7,3,2,1,5,6};   
+ loop2(p,p[]);    
+ return 0;}

@@ -1,0 +1,18 @@
+#include <windows.h>
+#include <iostream.h>
+void main()
+{
+   char SourceDerectoryName[MAX_PATH];
+   CHAR DestDerectoryName[MAX_PATH];
+   BOOL Success;
+   cout<<"请输入待拷贝的源文件夹的名称：";
+   cout<<"请输入待拷贝的目标文件夹的名称：";
+   cin>>SourceDerectoryName;
+   Success=CopyDerectory(SourceDerectoryName,DestDerectoryName,TRUE);
+  if(!Success)
+    {
+      cout<<拷贝失败，错误的代码为：<<GetLastError()<<endl;
+  else
+      cout<<文件夹拷贝成功<<endl;
+    }
+}
